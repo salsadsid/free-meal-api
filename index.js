@@ -1,12 +1,38 @@
 
 // fetch data from themealdb.com
 
-const loadFood = foods => {
+const loadFood = async foods => {
     const searchText = document.getElementById('searchText').value;
-    const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchText}`
-    fetch(url)
-        .then(res => res.json())
-        .then(data => searchFood(data))
+    const notFound = document.getElementById('not-found');
+    notFound.textContent = ""
+    if (searchText == "") {
+        const h3 = document.createElement('h3');
+        h3.innerText = "Please Enter Food Name";
+        h3.classList.add('text-center');
+        h3.classList.add('mt-4');
+        notFound.appendChild(h3);
+    }
+    else {
+        const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchText}`
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+            searchFood(data);
+        }
+        catch (error) {
+            displayErrorMessage(error)
+        }
+
+    }
+
+}
+const displayErrorMessage = (error) => {
+    const notFound = document.getElementById('not-found');
+    const h3 = document.createElement('h3');
+    h3.innerText = error;
+    h3.classList.add('text-center');
+    h3.classList.add('mt-4');
+    notFound.appendChild(h3);
 }
 
 // Show results in bootstrap cards
@@ -14,7 +40,8 @@ const loadFood = foods => {
 const searchFood = foods => {
     const container = document.getElementById('food-container');
     const notFound = document.getElementById('not-found');
-    console.log(foods)
+    notFound.innerText = "";
+    container.textContent = "";
     if (foods.meals == null) {
         const h3 = document.createElement('h3');
         h3.innerText = "Search result not found";
