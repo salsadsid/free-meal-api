@@ -1,7 +1,7 @@
 
 // fetch data from themealdb.com
 
-const loadFood = async foods => {
+const loadFood = async () => {
     const searchText = document.getElementById('searchText').value;
     const notFound = document.getElementById('not-found');
     notFound.textContent = ""
