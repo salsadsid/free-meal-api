@@ -1,6 +1,9 @@
 
 // fetch data from themealdb.com
-
+const spinner = toggle => {
+    document.getElementById('spinner').style.display = toggle;
+}
+spinner("none");
 const loadFood = async () => {
     const searchText = document.getElementById('searchText').value;
     const notFound = document.getElementById('not-found');
@@ -13,6 +16,7 @@ const loadFood = async () => {
         notFound.appendChild(h3);
     }
     else {
+        spinner("block");
         const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchText}`
         try {
             const res = await fetch(url);
@@ -22,22 +26,24 @@ const loadFood = async () => {
         catch (error) {
             displayErrorMessage(error)
         }
-
     }
 
 }
 const displayErrorMessage = (error) => {
+    spinner("none");
     const notFound = document.getElementById('not-found');
     const h3 = document.createElement('h3');
     h3.innerText = error;
     h3.classList.add('text-center');
     h3.classList.add('mt-4');
     notFound.appendChild(h3);
+
 }
 
 // Show results in bootstrap cards
 
 const searchFood = foods => {
+
     const container = document.getElementById('food-container');
     const notFound = document.getElementById('not-found');
     notFound.innerText = "";
@@ -48,8 +54,10 @@ const searchFood = foods => {
         h3.classList.add('text-center');
         h3.classList.add('mt-4');
         notFound.appendChild(h3);
+        spinner("none");
     }
     else {
+        spinner("none");
         foods.meals.forEach(food => {
 
             const div = document.createElement('div');
